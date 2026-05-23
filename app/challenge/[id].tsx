@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
@@ -9,7 +10,7 @@ import {
 } from "react-native";
 
 export default function ChallengeScreen() {
-  const { id } = useLocalSearchParams();
+  const { id, name } = useLocalSearchParams();
 
   const totalNumbers = Number(id);
 
@@ -17,6 +18,7 @@ export default function ChallengeScreen() {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
 
   const toggleNumber = (number: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (selectedNumbers.includes(number)) {
       setSelectedNumbers(selectedNumbers.filter((item) => item !== number));
 
@@ -25,10 +27,38 @@ export default function ChallengeScreen() {
 
     setSelectedNumbers([...selectedNumbers, number]);
   };
+  const totalSaved = selectedNumbers.reduce((acc, current) => acc + current, 0);
+
+  const challengeTotal = numbers.reduce((acc, current) => acc + current, 0);
+
+  const remaining = challengeTotal - totalSaved;
+  const progress = (totalSaved / challengeTotal) * 100;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Desafio {id}</Text>
+      <Text style={styles.title}>{name ? name : `Desafio ${id}`}</Text>
+      <View style={styles.summaryCard}>
+        <View>
+          <Text style={styles.summaryLabel}>Guardado</Text>
+
+          <Text style={styles.savedValue}>
+            R$ {totalSaved.toLocaleString("pt-BR")}
+          </Text>
+        </View>
+
+        <View>
+          <Text style={styles.summaryLabel}>Falta</Text>
+
+          <Text style={styles.remainingValue}>
+            R$ {remaining.toLocaleString("pt-BR")}
+          </Text>
+        </View>
+      </View>
+      <View style={styles.progressContainer}>
+        <View style={[styles.progressBar, { width: `${progress}%` }]} />
+
+        <Text style={styles.progressText}>{progress.toFixed(0)}%</Text>
+      </View>
 
       <FlatList
         data={numbers}
@@ -98,5 +128,57 @@ const styles = StyleSheet.create({
 
   numberTextSelected: {
     color: "#FFFFFF",
+  },
+  summaryCard: {
+    backgroundColor: "#111827",
+    borderRadius: 24,
+    padding: 24,
+    marginBottom: 24,
+
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  summaryLabel: {
+    color: "#94A3B8",
+    fontSize: 14,
+    marginBottom: 8,
+  },
+
+  savedValue: {
+    color: "#4ADE80",
+    fontSize: 26,
+    fontWeight: "bold",
+  },
+
+  remainingValue: {
+    color: "#FFFFFF",
+    fontSize: 26,
+    fontWeight: "bold",
+  },
+  progressContainer: {
+    height: 26,
+    backgroundColor: "#1E293B",
+    borderRadius: 999,
+    overflow: "hidden",
+    marginBottom: 30,
+
+    justifyContent: "center",
+  },
+
+  progressBar: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+
+    backgroundColor: "#22C55E",
+    borderRadius: 999,
+  },
+
+  progressText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

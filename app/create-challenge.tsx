@@ -68,7 +68,10 @@ export default function CreateChallengeScreen() {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.customCard}>
+      <TouchableOpacity
+        style={styles.customCard}
+        onPress={() => router.push("/custom-challenge")}
+      >
         <Text style={styles.customTitle}>⚙️ Personalizado</Text>
 
         <Text style={styles.customSubtitle}>
@@ -130,9 +133,23 @@ const styles = StyleSheet.create({
   },
   specialCard: {
     backgroundColor: "#111827",
+
+    borderRadius: 28,
     padding: 24,
-    borderRadius: 24,
-    marginTop: 12,
+    marginTop: 24,
+
+    borderWidth: 1.5,
+    borderColor: "#22C55E",
+
+    shadowColor: "#22C55E",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+
+    elevation: 8,
   },
 
   specialTitle: {

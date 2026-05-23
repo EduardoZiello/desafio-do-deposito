@@ -1,38 +1,108 @@
 import { router } from "expo-router";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useChallenges } from "../../context/ChallengeContext";
 const logo = require("../../assets/images/logo.png");
 
 export default function HomeScreen() {
+  const { challenges } = useChallenges();
   return (
-    <View style={styles.container}>
-      <Image source={logo} style={styles.logo} />
-      <Text style={styles.title}>Desafio do Depósito</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Image source={logo} style={styles.logo} />
+        <Text style={styles.title}>Desafio do Depósito</Text>
 
-      <Text style={styles.subtitle}>Seu desafio inteligente de economia</Text>
+        <Text style={styles.subtitle}>Seu desafio inteligente de economia</Text>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push("/create-challenge")}
-      >
-        <Text style={styles.buttonText}>+ Novo desafio</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/create-challenge")}
+        >
+          <Text style={styles.buttonText}>+ Novo desafio</Text>
+        </TouchableOpacity>
+        <Text style={styles.sectionTitle}>Meus desafios</Text>
+
+        {challenges.map((challenge) => {
+          const saved = challenge.selectedNumbers.reduce(
+            (acc, current) => acc + current,
+            0,
+          );
+
+          const progress = (saved / challenge.total) * 100;
+
+          return (
+            <TouchableOpacity
+              key={challenge.id}
+              style={styles.challengeCard}
+              onPress={() =>
+                router.push({
+                  pathname: "/challenge/[id]",
+                  params: {
+                    id: "100",
+                    name: challenge.name,
+                  },
+                })
+              }
+            >
+              <View style={styles.challengeHeader}>
+                <Text style={styles.challengeName}>{challenge.name}</Text>
+
+                <Text style={styles.challengePercentage}>
+                  {progress.toFixed(0)}%
+                </Text>
+              </View>
+
+              <View style={styles.challengeProgressBackground}>
+                <View
+                  style={[
+                    styles.challengeProgressFill,
+                    {
+                      width: `${progress}%`,
+                    },
+                  ]}
+                />
+              </View>
+
+              <View style={styles.challengeFooter}>
+                <Text style={styles.challengeSaved}>
+                  R$ {saved.toLocaleString("pt-BR")}
+                </Text>
+
+                <Text style={styles.challengeTotal}>
+                  de R$ {challenge.total.toLocaleString("pt-BR")}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0F172A",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
+    backgroundColor: "#020617",
+
+    paddingHorizontal: 24,
+    paddingTop: 20,
+
+    alignItems: "stretch",
   },
 
   title: {
     fontSize: 32,
     fontWeight: "bold",
     color: "#FFFFFF",
+    textAlign: "center",
   },
 
   subtitle: {
@@ -43,22 +113,102 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    marginTop: 40,
     backgroundColor: "#22C55E",
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 16,
+
+    paddingVertical: 20,
+
+    borderRadius: 22,
+
+    alignItems: "center",
+    justifyContent: "center",
+
+    marginTop: 50,
   },
 
   buttonText: {
     color: "#FFFFFF",
-    fontSize: 16,
+    fontSize: 22,
     fontWeight: "bold",
+    textAlign: "center",
   },
   logo: {
     width: 170,
     height: 170,
     marginBottom: 20,
     resizeMode: "contain",
+    alignSelf: "center",
+  },
+  sectionTitle: {
+    color: "#FFFFFF",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginTop: 50,
+    marginBottom: 20,
+    textAlign: "center",
+  },
+
+  challengeCard: {
+    backgroundColor: "#111827",
+
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 16,
+
+    borderWidth: 1,
+    borderColor: "#1E293B",
+
+    width: "100%",
+  },
+
+  challengeHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  challengeName: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+
+  challengePercentage: {
+    color: "#4ADE80",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+
+  challengeProgressBackground: {
+    height: 10,
+
+    backgroundColor: "#1E293B",
+    borderRadius: 999,
+
+    overflow: "hidden",
+    marginTop: 18,
+  },
+
+  challengeProgressFill: {
+    height: "100%",
+    backgroundColor: "#22C55E",
+    borderRadius: 999,
+  },
+
+  challengeFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+
+    marginTop: 16,
+  },
+
+  challengeSaved: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+
+  challengeTotal: {
+    color: "#94A3B8",
+    marginLeft: 8,
   },
 });

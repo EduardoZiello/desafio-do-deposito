@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type Challenge = {
   id: string;
@@ -14,6 +15,7 @@ type ChallengeContextData = {
   addChallenge: (challenge: Challenge) => void;
 
   updateChallenge: (id: string, selectedNumbers: number[]) => void;
+  removeChallenge: (id: string) => void;
 };
 
 const ChallengeContext = createContext<ChallengeContextData>(
@@ -22,6 +24,12 @@ const ChallengeContext = createContext<ChallengeContextData>(
 
 export function ChallengeProvider({ children }: any) {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
+  useEffect(() => {
+    loadChallenges();
+  }, []);
+  useEffect(() => {
+    saveChallenges(challenges);
+  }, [challenges]);
 
   function addChallenge(challenge: Challenge) {
     setChallenges((prev) => [...prev, challenge]);
@@ -39,6 +47,20 @@ export function ChallengeProvider({ children }: any) {
       ),
     );
   }
+  function removeChallenge(id: string) {
+    setChallenges((prev) => prev.filter((challenge) => challenge.id !== id));
+  }
+  async function saveChallenges(challengesData: Challenge[]) {
+    await AsyncStorage.setItem("@desafios", JSON.stringify(challengesData));
+  }
+
+  async function loadChallenges() {
+    const storage = await AsyncStorage.getItem("@desafios");
+
+    if (storage) {
+      setChallenges(JSON.parse(storage));
+    }
+  }
 
   return (
     <ChallengeContext.Provider
@@ -46,6 +68,7 @@ export function ChallengeProvider({ children }: any) {
         challenges,
         addChallenge,
         updateChallenge,
+        removeChallenge,
       }}
     >
       {children}

@@ -1,5 +1,6 @@
 import { router } from "expo-router";
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -12,7 +13,7 @@ import { useChallenges } from "../../context/ChallengeContext";
 const logo = require("../../assets/images/logo.png");
 
 export default function HomeScreen() {
-  const { challenges } = useChallenges();
+  const { challenges, removeChallenge } = useChallenges();
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -74,6 +75,30 @@ export default function HomeScreen() {
                   {progress.toFixed(0)}%
                 </Text>
               </View>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() =>
+                  Alert.alert(
+                    "Excluir desafio",
+                    "Deseja realmente excluir este desafio?",
+                    [
+                      {
+                        text: "Cancelar",
+                        style: "cancel",
+                      },
+
+                      {
+                        text: "Excluir",
+                        style: "destructive",
+
+                        onPress: () => removeChallenge(challenge.id),
+                      },
+                    ],
+                  )
+                }
+              >
+                <Text style={styles.deleteButtonText}>✕</Text>
+              </TouchableOpacity>
 
               <View style={styles.challengeProgressBackground}>
                 <View
@@ -246,5 +271,28 @@ const styles = StyleSheet.create({
 
   specialChallengeTitle: {
     color: "#4ADE80",
+  },
+  deleteButton: {
+    position: "absolute",
+    right: 0,
+    top: -4,
+
+    width: 28,
+    height: 28,
+
+    borderRadius: 999,
+
+    backgroundColor: "#1E293B",
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    zIndex: 1,
+  },
+
+  deleteButtonText: {
+    color: "#94A3B8",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

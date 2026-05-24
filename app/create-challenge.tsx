@@ -37,7 +37,11 @@ export default function CreateChallengeScreen() {
           onPress={() =>
             router.push({
               pathname: "/challenge/[id]",
-              params: { id: item.amount.toString() },
+              params: {
+                id: item.amount.toString(),
+                name: `${item.amount} depósitos`,
+                total: item.amount.toString(),
+              },
             })
           }
         >
@@ -53,7 +57,11 @@ export default function CreateChallengeScreen() {
         onPress={() =>
           router.push({
             pathname: "/challenge/[id]",
-            params: { id: "365" },
+            params: {
+              id: "365",
+              name: "Desafio 365",
+              total: "365",
+            },
           })
         }
       >

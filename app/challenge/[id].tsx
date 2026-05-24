@@ -1,5 +1,5 @@
 import * as Haptics from "expo-haptics";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
@@ -8,14 +8,25 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useChallenges } from "../../context/ChallengeContext";
 
 export default function ChallengeScreen() {
-  const { id, name } = useLocalSearchParams();
+  const { challenges, addChallenge, updateChallenge } = useChallenges();
+  const { id, total, name } = useLocalSearchParams();
+  console.log("PARAMS:", {
+    id,
+    total,
+    name,
+  });
+  const challengeName = typeof name === "string" ? name : `Desafio ${id}`;
+  const existingChallenge = challenges.find((challenge) => challenge.id === id);
 
-  const totalNumbers = Number(id);
+  const totalNumbers = Number(total);
 
   const numbers = Array.from({ length: totalNumbers }, (_, i) => i + 1);
-  const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
+  const [selectedNumbers, setSelectedNumbers] = useState<number[]>(
+    existingChallenge?.selectedNumbers || [],
+  );
 
   const toggleNumber = (number: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -77,6 +88,26 @@ export default function ChallengeScreen() {
           </TouchableOpacity>
         )}
       />
+      <TouchableOpacity
+        style={styles.saveButton}
+        onPress={() => {
+          if (existingChallenge) {
+            updateChallenge(existingChallenge.id, selectedNumbers);
+          } else {
+            addChallenge({
+              id: Date.now().toString(),
+              name: challengeName,
+              total: challengeTotal,
+              depositCount: totalNumbers,
+              selectedNumbers,
+            });
+          }
+
+          router.push("/");
+        }}
+      >
+        <Text style={styles.saveButtonText}>Salvar desafio</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -180,5 +211,21 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  saveButton: {
+    backgroundColor: "#22C55E",
+    paddingVertical: 20,
+    borderRadius: 20,
+
+    alignItems: "center",
+
+    marginTop: 20,
+    marginBottom: 40,
+  },
+
+  saveButtonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

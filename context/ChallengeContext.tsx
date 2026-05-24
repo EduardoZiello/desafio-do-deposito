@@ -4,12 +4,16 @@ type Challenge = {
   id: string;
   name: string;
   total: number;
+  depositCount: number;
   selectedNumbers: number[];
 };
 
 type ChallengeContextData = {
   challenges: Challenge[];
+
   addChallenge: (challenge: Challenge) => void;
+
+  updateChallenge: (id: string, selectedNumbers: number[]) => void;
 };
 
 const ChallengeContext = createContext<ChallengeContextData>(
@@ -23,11 +27,25 @@ export function ChallengeProvider({ children }: any) {
     setChallenges((prev) => [...prev, challenge]);
   }
 
+  function updateChallenge(id: string, selectedNumbers: number[]) {
+    setChallenges((prev) =>
+      prev.map((challenge) =>
+        challenge.id === id
+          ? {
+              ...challenge,
+              selectedNumbers,
+            }
+          : challenge,
+      ),
+    );
+  }
+
   return (
     <ChallengeContext.Provider
       value={{
         challenges,
         addChallenge,
+        updateChallenge,
       }}
     >
       {children}

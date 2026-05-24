@@ -40,19 +40,35 @@ export default function HomeScreen() {
           return (
             <TouchableOpacity
               key={challenge.id}
-              style={styles.challengeCard}
+              style={[
+                styles.challengeCard,
+
+                challenge.name === "Desafio 365" && styles.specialChallengeCard,
+              ]}
               onPress={() =>
                 router.push({
                   pathname: "/challenge/[id]",
                   params: {
-                    id: "100",
+                    id: challenge.id,
                     name: challenge.name,
+                    total: challenge.depositCount.toString(),
                   },
                 })
               }
             >
               <View style={styles.challengeHeader}>
-                <Text style={styles.challengeName}>{challenge.name}</Text>
+                <Text
+                  style={[
+                    styles.challengeName,
+
+                    challenge.name === "Desafio 365" &&
+                      styles.specialChallengeTitle,
+                  ]}
+                >
+                  {challenge.name === "Desafio 365"
+                    ? "🔥 Desafio 365"
+                    : challenge.name}
+                </Text>
 
                 <Text style={styles.challengePercentage}>
                   {progress.toFixed(0)}%
@@ -210,5 +226,25 @@ const styles = StyleSheet.create({
   challengeTotal: {
     color: "#94A3B8",
     marginLeft: 8,
+  },
+  specialChallengeCard: {
+    borderColor: "#22C55E",
+    borderWidth: 2,
+
+    shadowColor: "#22C55E",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+
+    elevation: 10,
+
+    backgroundColor: "#0F172A",
+  },
+
+  specialChallengeTitle: {
+    color: "#4ADE80",
   },
 });

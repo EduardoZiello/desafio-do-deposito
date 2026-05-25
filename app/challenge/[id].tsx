@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useChallenges } from "../../context/ChallengeContext";
 
 export default function ChallengeScreen() {
@@ -46,7 +48,10 @@ export default function ChallengeScreen() {
   const progress = (totalSaved / challengeTotal) * 100;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+        <Ionicons name="arrow-back" size={30} color="#FFFFFF" />
+      </TouchableOpacity>
       <Text style={styles.title}>{name ? name : `Desafio ${id}`}</Text>
       <View style={styles.summaryCard}>
         <View>
@@ -66,7 +71,18 @@ export default function ChallengeScreen() {
         </View>
       </View>
       <View style={styles.progressContainer}>
-        <View style={[styles.progressBar, { width: `${progress}%` }]} />
+        <View
+          style={[
+            styles.progressBar,
+            {
+              width: `${progress}%`,
+              position: "absolute",
+              left: 0,
+              top: 0,
+              bottom: 0,
+            },
+          ]}
+        />
 
         <Text style={styles.progressText}>{progress.toFixed(0)}%</Text>
       </View>
@@ -108,7 +124,7 @@ export default function ChallengeScreen() {
       >
         <Text style={styles.saveButtonText}>Salvar desafio</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -116,27 +132,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0F172A",
-    paddingTop: 60,
+    paddingTop: 20,
     paddingHorizontal: 20,
   },
 
   title: {
-    fontSize: 28,
+    fontSize: 42,
     fontWeight: "bold",
     color: "#FFFFFF",
-    marginBottom: 24,
+
+    marginTop: 10,
+    marginBottom: 10,
   },
 
   list: {
-    paddingBottom: 40,
+    paddingTop: 10,
+    paddingBottom: 60,
   },
 
   numberCard: {
     flex: 1,
+
     backgroundColor: "#1E293B",
+
     margin: 8,
-    height: 80,
-    borderRadius: 20,
+
+    height: 92,
+
+    borderRadius: 28,
+
     overflow: "hidden",
 
     justifyContent: "center",
@@ -144,12 +168,23 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     borderColor: "#334155",
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+
+    elevation: 6,
   },
 
   numberText: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#FFFFFF",
+
     zIndex: 1,
   },
   numberCardSelected: {
@@ -162,12 +197,29 @@ const styles = StyleSheet.create({
   },
   summaryCard: {
     backgroundColor: "#111827",
-    borderRadius: 24,
-    padding: 24,
-    marginBottom: 24,
+
+    borderRadius: 32,
+
+    paddingVertical: 28,
+    paddingHorizontal: 26,
+
+    marginTop: 30,
 
     flexDirection: "row",
     justifyContent: "space-between",
+
+    borderWidth: 1,
+    borderColor: "#1E293B",
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+
+    elevation: 10,
   },
 
   summaryLabel: {
@@ -188,44 +240,75 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   progressContainer: {
-    height: 26,
-    backgroundColor: "#1E293B",
-    borderRadius: 999,
-    overflow: "hidden",
-    marginBottom: 30,
+    height: 22,
 
-    justifyContent: "center",
+    backgroundColor: "#1E293B",
+
+    borderRadius: 999,
+
+    overflow: "hidden",
+
+    marginTop: 30,
+    marginBottom: 40,
   },
 
   progressBar: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    bottom: 0,
+    height: "100%",
 
     backgroundColor: "#22C55E",
+
     borderRadius: 999,
+
+    shadowColor: "#22C55E",
+    shadowOpacity: 0.6,
+    shadowRadius: 10,
+
+    elevation: 5,
   },
 
   progressText: {
+    position: "absolute",
+
+    alignSelf: "center",
+
     color: "#FFFFFF",
+
     fontWeight: "bold",
-    textAlign: "center",
+
+    fontSize: 13,
+
+    zIndex: 10,
   },
+
   saveButton: {
     backgroundColor: "#22C55E",
-    paddingVertical: 20,
-    borderRadius: 20,
+
+    paddingVertical: 22,
+
+    borderRadius: 28,
 
     alignItems: "center",
 
-    marginTop: 20,
-    marginBottom: 40,
+    marginTop: 30,
+    marginBottom: 50,
+
+    shadowColor: "#22C55E",
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+
+    elevation: 10,
   },
 
   saveButtonText: {
     color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  backButton: {
+    marginBottom: 20,
   },
 });

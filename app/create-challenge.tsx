@@ -1,5 +1,7 @@
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const calculateTotal = (number: number) => {
   return (number * (number + 1)) / 2;
@@ -23,70 +25,82 @@ const options = [
 
 export default function CreateChallengeScreen() {
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Qual o tamanho do seu desafio?</Text>
-
-      <Text style={styles.subtitle}>
-        Escolha quantos depósitos deseja completar
-      </Text>
-
-      {options.map((item) => (
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         <TouchableOpacity
-          key={item.amount}
-          style={styles.card}
+          onPress={() => router.back()}
+          style={styles.backButton}
+        >
+          <Ionicons name="arrow-back" size={30} color="#FFFFFF" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Qual o tamanho do seu desafio?</Text>
+
+        <Text style={styles.subtitle}>
+          Escolha quantos depósitos deseja completar
+        </Text>
+
+        {options.map((item) => (
+          <TouchableOpacity
+            key={item.amount}
+            style={styles.card}
+            onPress={() =>
+              router.push({
+                pathname: "/challenge/[id]",
+                params: {
+                  id: item.amount.toString(),
+                  name: `${item.amount} depósitos`,
+                  total: item.amount.toString(),
+                },
+              })
+            }
+          >
+            <Text style={styles.cardTitle}>{item.amount} depósitos</Text>
+
+            <Text style={styles.cardValue}>
+              R$ {item.total.toLocaleString("pt-BR")}
+            </Text>
+          </TouchableOpacity>
+        ))}
+        <TouchableOpacity
+          style={styles.specialCard}
           onPress={() =>
             router.push({
               pathname: "/challenge/[id]",
               params: {
-                id: item.amount.toString(),
-                name: `${item.amount} depósitos`,
-                total: item.amount.toString(),
+                id: "365",
+                name: "Desafio 365",
+                total: "365",
               },
             })
           }
         >
-          <Text style={styles.cardTitle}>{item.amount} depósitos</Text>
+          <Text style={styles.specialTitle}>🔥 Desafio 365</Text>
 
-          <Text style={styles.cardValue}>
-            R$ {item.total.toLocaleString("pt-BR")}
+          <Text style={styles.specialSubtitle}>
+            1 depósito por dia durante 1 ano
+          </Text>
+
+          <Text style={styles.specialValue}>
+            R$ {calculateTotal(365).toLocaleString("pt-BR")}
           </Text>
         </TouchableOpacity>
-      ))}
-      <TouchableOpacity
-        style={styles.specialCard}
-        onPress={() =>
-          router.push({
-            pathname: "/challenge/[id]",
-            params: {
-              id: "365",
-              name: "Desafio 365",
-              total: "365",
-            },
-          })
-        }
-      >
-        <Text style={styles.specialTitle}>🔥 Desafio 365</Text>
 
-        <Text style={styles.specialSubtitle}>
-          1 depósito por dia durante 1 ano
-        </Text>
+        <TouchableOpacity
+          style={styles.customCard}
+          onPress={() => router.push("/custom-challenge")}
+        >
+          <Text style={styles.customTitle}>⚙️ Personalizado</Text>
 
-        <Text style={styles.specialValue}>
-          R$ {calculateTotal(365).toLocaleString("pt-BR")}
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.customCard}
-        onPress={() => router.push("/custom-challenge")}
-      >
-        <Text style={styles.customTitle}>⚙️ Personalizado</Text>
-
-        <Text style={styles.customSubtitle}>
-          Escolha sua própria quantidade de depósitos
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+          <Text style={styles.customSubtitle}>
+            Escolha sua própria quantidade de depósitos
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -98,13 +112,17 @@ const styles = StyleSheet.create({
 
   content: {
     padding: 24,
-    paddingTop: 60,
-  },
 
+    paddingTop: 60,
+
+    paddingBottom: 220,
+  },
   title: {
-    fontSize: 30,
+    fontSize: 42,
     fontWeight: "bold",
     color: "#FFFFFF",
+
+    marginTop: 10,
   },
 
   subtitle: {
@@ -116,9 +134,12 @@ const styles = StyleSheet.create({
 
   card: {
     backgroundColor: "#1E293B",
-    padding: 22,
-    borderRadius: 20,
-    marginBottom: 16,
+
+    padding: 24,
+
+    borderRadius: 28,
+
+    marginBottom: 18,
 
     flexDirection: "row",
     justifyContent: "space-between",
@@ -126,6 +147,16 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     borderColor: "#334155",
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+
+    elevation: 5,
   },
 
   cardTitle: {
@@ -200,5 +231,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
     color: "#64748B",
     fontSize: 15,
+  },
+  backButton: {
+    marginBottom: 20,
   },
 });

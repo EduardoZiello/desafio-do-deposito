@@ -3,9 +3,13 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
+
 import { Stack } from "expo-router";
+
 import { StatusBar } from "expo-status-bar";
+
 import "react-native-reanimated";
+
 import { ChallengeProvider } from "../context/ChallengeContext";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -20,13 +24,22 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <ChallengeProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="(tabs)" />
+
           <Stack.Screen
             name="modal"
-            options={{ presentation: "modal", title: "Modal" }}
+            options={{
+              presentation: "modal",
+              title: "Modal",
+            }}
           />
         </Stack>
+
         <StatusBar style="light" />
       </ChallengeProvider>
     </ThemeProvider>

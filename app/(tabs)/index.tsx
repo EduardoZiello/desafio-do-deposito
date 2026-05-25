@@ -37,12 +37,15 @@ export default function HomeScreen() {
           );
 
           const progress = (saved / challenge.total) * 100;
+          const isCompleted = progress >= 100;
 
           return (
             <TouchableOpacity
               key={challenge.id}
               style={[
                 styles.challengeCard,
+
+                isCompleted && styles.completedCard,
 
                 challenge.name === "Desafio 365" && styles.specialChallengeCard,
               ]}
@@ -71,9 +74,13 @@ export default function HomeScreen() {
                     : challenge.name}
                 </Text>
 
-                <Text style={styles.challengePercentage}>
-                  {progress.toFixed(0)}%
-                </Text>
+                {isCompleted ? (
+                  <Text style={styles.completedBadge}>🏆 CONCLUÍDO</Text>
+                ) : (
+                  <Text style={styles.challengePercentage}>
+                    {progress.toFixed(0)}%
+                  </Text>
+                )}
               </View>
               <TouchableOpacity
                 style={styles.deleteButton}
@@ -137,6 +144,13 @@ const styles = StyleSheet.create({
     paddingTop: 20,
 
     alignItems: "stretch",
+  },
+  completedBadge: {
+    color: "#FACC15",
+
+    fontSize: 14,
+
+    fontWeight: "bold",
   },
 
   title: {
@@ -294,5 +308,21 @@ const styles = StyleSheet.create({
     color: "#94A3B8",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  completedCard: {
+    borderColor: "#FACC15",
+
+    shadowColor: "#FACC15",
+
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+
+    shadowOpacity: 0.35,
+
+    shadowRadius: 12,
+
+    elevation: 10,
   },
 });

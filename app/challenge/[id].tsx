@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import ConfettiCannon from "react-native-confetti-cannon";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useChallenges } from "../../context/ChallengeContext";
 
@@ -46,6 +47,7 @@ export default function ChallengeScreen() {
 
   const remaining = challengeTotal - totalSaved;
   const progress = (totalSaved / challengeTotal) * 100;
+  const isCompleted = progress >= 100;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -104,6 +106,9 @@ export default function ChallengeScreen() {
           </TouchableOpacity>
         )}
       />
+      {isCompleted && (
+        <ConfettiCannon count={120} origin={{ x: -10, y: 0 }} fadeOut />
+      )}
       <TouchableOpacity
         style={styles.saveButton}
         onPress={() => {

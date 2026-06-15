@@ -3,6 +3,8 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
+import { useEffect } from "react";
+import { anonymousLogin } from "../services/auth";
 
 import { Stack } from "expo-router";
 
@@ -20,6 +22,9 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  useEffect(() => {
+    anonymousLogin();
+  }, []);
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
@@ -30,6 +35,8 @@ export default function RootLayout() {
           }}
         >
           <Stack.Screen name="(tabs)" />
+
+          <Stack.Screen name="onboarding" />
 
           <Stack.Screen
             name="modal"

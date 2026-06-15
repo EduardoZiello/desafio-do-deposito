@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "966293285153",
+    "project_id": "desafio-do-deposito",
+    "storage_bucket": "desafio-do-deposito.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966293285153:android:d29ba32443e34cdee9f660",
+        "android_client_info": {
+          "package_name": "com.eduardoziello.desafiododeposito"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2kB2BnnzKU7eQ87-RrSacAFjkwoFR8w0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

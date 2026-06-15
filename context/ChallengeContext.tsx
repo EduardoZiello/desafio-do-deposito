@@ -1,5 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { auth, db } from "../services/firebaseConfig";
+
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 type Challenge = {
   id: string;
@@ -21,14 +24,46 @@ type ChallengeContextData = {
 const ChallengeContext = createContext<ChallengeContextData>(
   {} as ChallengeContextData,
 );
+async function saveChallengesToFirebase(challengesData: Challenge[]) {
+  const user = auth.currentUser;
+
+  if (!user) return;
+
+  await setDoc(doc(db, "users", user.uid), {
+    challenges: challengesData,
+  });
+}
 
 export function ChallengeProvider({ children }: any) {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
+  async function loadChallengesFromFirebase() {
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    const docRef = doc(db, "users", user.uid);
+
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+
+      if (data.challenges) {
+        setChallenges(data.challenges);
+      }
+    }
+  }
   useEffect(() => {
     loadChallenges();
+
+    setTimeout(() => {
+      loadChallengesFromFirebase();
+    }, 1000);
   }, []);
   useEffect(() => {
     saveChallenges(challenges);
+
+    saveChallengesToFirebase(challenges);
   }, [challenges]);
 
   function addChallenge(challenge: Challenge) {

@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import {
   Alert,
@@ -9,11 +10,24 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { useEffect } from "react";
 import { useChallenges } from "../../context/ChallengeContext";
 const logo = require("../../assets/images/logo.png");
 
 export default function HomeScreen() {
   const { challenges, removeChallenge } = useChallenges();
+  useEffect(() => {
+    async function checkOnboarding() {
+      const onboardingSeen = await AsyncStorage.getItem("onboardingSeen");
+
+      if (!onboardingSeen) {
+        router.replace("/onboarding");
+      }
+    }
+
+    checkOnboarding();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>

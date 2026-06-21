@@ -10,6 +10,7 @@ type Challenge = {
   total: number;
   depositCount: number;
   selectedNumbers: number[];
+  createdAt: number;
 };
 
 type ChallengeContextData = {

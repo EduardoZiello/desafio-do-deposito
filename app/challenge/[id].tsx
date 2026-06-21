@@ -121,6 +121,7 @@ export default function ChallengeScreen() {
               total: challengeTotal,
               depositCount: totalNumbers,
               selectedNumbers,
+              createdAt: Date.now(),
             });
           }
 

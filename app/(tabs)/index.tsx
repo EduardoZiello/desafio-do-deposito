@@ -52,6 +52,11 @@ export default function HomeScreen() {
 
           const progress = (saved / challenge.total) * 100;
           const isCompleted = progress >= 100;
+          const daysSinceCreated = challenge.createdAt
+            ? Math.floor(
+                (Date.now() - challenge.createdAt) / (1000 * 60 * 60 * 24),
+              )
+            : 0;
 
           return (
             <TouchableOpacity
@@ -132,6 +137,10 @@ export default function HomeScreen() {
                 />
               </View>
 
+              <Text style={styles.challengeDate}>
+                Criado há {daysSinceCreated}{" "}
+                {daysSinceCreated === 1 ? "dia" : "dias"}
+              </Text>
               <View style={styles.challengeFooter}>
                 <Text style={styles.challengeSaved}>
                   R$ {saved.toLocaleString("pt-BR")}
@@ -338,5 +347,10 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
 
     elevation: 10,
+  },
+  challengeDate: {
+    color: "#94A3B8",
+    fontSize: 13,
+    marginTop: 10,
   },
 });

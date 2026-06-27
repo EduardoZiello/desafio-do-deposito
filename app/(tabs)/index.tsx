@@ -137,9 +137,9 @@ export default function HomeScreen() {
                 />
               </View>
 
-              <Text style={styles.challengeDate}>
-                Criado há {daysSinceCreated}{" "}
-                {daysSinceCreated === 1 ? "dia" : "dias"}
+              <Text style={styles.challengeDeposits}>
+                {challenge.selectedNumbers.length} de {challenge.depositCount}{" "}
+                depósitos
               </Text>
               <View style={styles.challengeFooter}>
                 <Text style={styles.challengeSaved}>
@@ -348,9 +348,10 @@ const styles = StyleSheet.create({
 
     elevation: 10,
   },
-  challengeDate: {
-    color: "#94A3B8",
-    fontSize: 13,
-    marginTop: 10,
+
+  challengeDeposits: {
+    color: "#CBD5E1",
+    fontSize: 14,
+    marginTop: 8,
   },
 });

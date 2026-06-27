@@ -12,7 +12,20 @@
           "package_name": "com.eduardoziello.desafiododeposito"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "966293285153-puej0ri5glnu686iqm3t6q54lj0b21b5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eduardoziello.desafiododeposito",
+            "certificate_hash": "21c642adc0d110fcb76a697ed38214ce74bde8c4"
+          }
+        },
+        {
+          "client_id": "966293285153-95le1n0gofgsodv0ekfra77hv6snb84o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA2kB2BnnzKU7eQ87-RrSacAFjkwoFR8w0"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966293285153-95le1n0gofgsodv0ekfra77hv6snb84o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
